@@ -14,10 +14,22 @@ from sqlalchemy.orm import (
 
 
 class Base(DeclarativeBase):
+    '''
+    All our models will inherit from DeclarativeBase. Create
+    it only once for the project and use it throughout the
+    project.
+    '''
     pass
 
 
 class Post(Base):
+    '''
+    Define each of the db table columns as a class property
+    of this class, Post. This model will assist in reading 
+    and writing post data to the database.
+    
+    Using SQLAlchemy 2.0 model declaration convention.
+    '''
     __tablename__ = 'posts'
     
     id: Mapped[int] = mapped_column(
