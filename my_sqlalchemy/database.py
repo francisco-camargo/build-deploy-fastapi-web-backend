@@ -14,17 +14,20 @@ from sqlalchemy.ext.asyncio import (
 from my_sqlalchemy.models import Base
 
 DATABASE_URL = 'sqlite+aiosqlite:///chapter06_sqlalchemy.db'
-    # This string specifies the following
-        # the database engine; sqlite
-        # Optional driver; aiosqlite
-        # Optional authentication information
-        # Hostname of the database server. For SQLite we
-            # just need to specify the path of the file that
-            # will store all the data
-    # For more info
-        # https://docs.sqlalchemy.org/en/20/core/engines.html#database-urls
-    # Could alternatively create URLs programmatically
-        # https://docs.sqlalchemy.org/en/20/core/engines.html#creating-urls-programmatically
+'''
+DATABASE_URL specifies the following:
+    The database engine; sqlite
+    Optional driver; aiosqlite
+    Optional authentication information
+    Hostname of the database server. For SQLite we
+        just need to specify the path of the file that
+        will store all the data
+For more info
+    https://docs.sqlalchemy.org/en/20/core/engines.html#database-urls
+Could alternatively create URLs programmatically
+    https://docs.sqlalchemy.org/en/20/core/engines.html#creating-urls-programmatically
+'''
+
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(
     engine,
