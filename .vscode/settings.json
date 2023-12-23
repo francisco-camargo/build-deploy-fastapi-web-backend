@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
+        "aiosqlite",
+        "async_sessionmaker",
         "datatime",
         "Pydantic"
     ]
