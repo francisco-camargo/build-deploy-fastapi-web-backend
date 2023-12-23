@@ -29,23 +29,23 @@ engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(
     engine=engine,
     expire_on_commit=False,
-    )
+)
+
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker() as session:
         yield session
-        
-        
+
+
 async def create_all_tables():
     '''
     Create the table's schema inside the database. This is a
-    simple example, in real-world projects we would need a 
+    simple example, in real-world projects we would need a
     proper migration system.
-    
+
     To make sure the schema is created when the application
-    starts, we must call this function as part of the 
+    starts, we must call this function as part of the
     lifespan handler of FastAPI defined in app.py
     '''
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-        
