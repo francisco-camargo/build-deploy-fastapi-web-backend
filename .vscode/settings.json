@@ -3,6 +3,7 @@
         "aiosqlite",
         "async_sessionmaker",
         "datatime",
-        "Pydantic"
+        "Pydantic",
+        "selectinload"
     ]
 }
