@@ -5,11 +5,13 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    ForeignKey,
 )
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
     mapped_column,
+    relationship,
 )
 
 
@@ -21,6 +23,34 @@ class Base(DeclarativeBase):
     '''
 
     pass
+
+
+class Comment(Base):
+    __tablename__ = 'comments'
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+    )
+    post_id: Mapped[int] = mapped_column(
+        ForeignKey('posts.id'),
+        nullable=False,
+    )
+    publication_date: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        default=datetime.now,
+    )
+    content: Mapped[str] = mapped_column(
+        Text,
+        nullable=False,
+    )
+
+    post: Mapped['Post'] = relationship(
+        'Post',
+        back_populates='comments',
+    )
 
 
 class Post(Base):
@@ -51,4 +81,9 @@ class Post(Base):
     content: Mapped[str] = mapped_column(
         Text,
         nullable=False,
+    )
+
+    comments: Mapped[list[Comment]] = relationship(
+        'Comment',
+        cascade='all, delete',
     )
