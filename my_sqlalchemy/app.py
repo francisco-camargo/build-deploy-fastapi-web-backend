@@ -148,7 +148,7 @@ async def delete_post(
 
 
 @app.post(
-    'posts/{id}/comments',
+    '/posts/{id}/comments',
     response_model=schemas.CommentRead,
     status_code=status.HTTP_201_CREATED,
 )
