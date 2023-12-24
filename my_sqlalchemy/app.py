@@ -48,6 +48,9 @@ async def list_posts(
     pagination: tuple[int, int] = Depends(pagination),
     session: AsyncSession = Depends(get_async_session),
 ) -> Sequence[Post]:
+    '''
+    Obtain all posts, given skip and limit parameters
+    '''
     skip, limit = pagination
     select_query = select(Post).offset(skip).limit(limit)
     result = await session.execute(select_query)
@@ -64,8 +67,70 @@ async def create_post(
     post_create: schemas.PostPartialUpdate,
     session: AsyncSession = Depends(get_async_session),
 ) -> Post:
+    '''
+    Add a post to the db by providing title and content
+    '''
     post = Post(**post_create.dict())
     session.add(post)
     await session.commit()
 
     return post
+
+
+async def get_post_or_404(
+    id: int,
+    session: AsyncSession = Depends(get_async_session),
+) -> Post:
+    '''
+    Find post given id, return exception if id not found
+    '''
+    select_query = select(Post).where(Post.id == id)
+    result = await session.execute(select_query)
+    post = result.scalar_one_or_none()
+
+    if post is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    return post
+
+
+@app.get(
+    '/posts/{id}',
+    response_model=schemas.PostRead,
+)
+async def get_post(post: Post = Depends(get_post_or_404)) -> Post:
+    '''
+    Route to return post based on id given
+    '''
+    return post
+
+
+@app.patch(
+    '/posts/{id}',
+    response_model=schemas.PostRead,
+)
+async def update_post(
+    post_update: schemas.PostPartialUpdate,
+    post: Post = Depends(get_post_or_404),
+    session: AsyncSession = Depends(get_async_session),
+) -> Post:
+    post_update_dict = post_update.dict(exclude_unset=True)
+    for key, value in post_update_dict.items():
+        setattr(post, key, value)
+
+    session.add(post)
+    await session.commit()
+
+    return post
+
+
+@app.delete(
+    '/posts/{id}',
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_post(
+    post: Post = Depends(get_post_or_404),
+    session: AsyncSession = Depends(get_async_session),
+):
+    await session.delete(post)
+    await session.commit()
