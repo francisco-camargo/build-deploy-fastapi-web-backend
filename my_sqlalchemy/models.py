@@ -42,7 +42,12 @@ class Comment(Base):
         nullable=False,
         default=datetime.now,
     )
-    content: Mapped['Post'] = relationship(
+    content: Mapped[str] = mapped_column(
+        Text,
+        nullable=False,
+    )
+
+    post: Mapped['Post'] = relationship(
         'Post',
         back_populates='comments',
     )
