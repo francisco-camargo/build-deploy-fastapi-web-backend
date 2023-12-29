@@ -11,12 +11,4 @@ View documentation at `http://localhost:8000/docs`
 
 Use Pydantic models (schemas for short) to validate and serialize the data, but the database communication will be done with the ORM model (model for short).
 
-## Creating ORM Models
-
 Each ORM model is a Python class whose attributes represent the columns of your table. The actual entities of the database are instances of this class, providing access to its data. SQLAlchemy ORM links this Python object and the row in the database. The blog post model is defined via `models.py`.
-
-## Defining Pydantic Schemas
-
-## Connecting to SQLite Database
-
-## Creating Objects
